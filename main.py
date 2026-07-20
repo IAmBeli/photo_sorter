@@ -15,7 +15,7 @@ def classify_photo(path, model, preprocess, categories, device):
 
 device = "cpu"
 model, preprocess = clip.load("ViT-B/32", device=device)
-categories = ["food", "nature", "architecture", "people"]
+categories = ["plate of food", "nature", "architecture", "group of people", "vehicles", "clothes", "drinks"]
 
 source_folder = input("Enter path to photos folder: ")
 output_folder = "sorted"
@@ -27,10 +27,11 @@ images = []
 for f in files:
     if f.lower().endswith((".jpg", ".jpeg", ".png")):
         images.append(f)
-for name in images:
+total = len(images)
+for index, name in enumerate(images, start=1):
     path = os.path.join(source_folder, name)
     category = classify_photo(path, model, preprocess, categories, device)
     dst_folder = os.path.join(output_folder, category)
     os.makedirs(dst_folder, exist_ok=True)
     shutil.copy(path, dst_folder)
-    print(name, "->", category)
+    print(f"[{index}/{total}] {name} -> {category}")
